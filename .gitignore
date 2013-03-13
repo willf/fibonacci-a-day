@@ -11,3 +11,24 @@ project/plugins/project/
 
 # Scala-IDE specific
 .scala_dependencies
+# eclipse specific
+.metadata
+jrebel.lic
+.idea/workspace.xml
+.idea/bashsupport_project.xml
+
+*.iml
+*.ipr
+*.iws
+
+target
+.idea
+.settings
+.classpath
+.project
+.ensime*
+*.sublime-*
+.cache
+.lib
+.tags
+.tags_sorted_by_file
