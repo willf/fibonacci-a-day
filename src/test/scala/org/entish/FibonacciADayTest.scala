@@ -3,7 +3,7 @@ import org.specs2.mutable._
 import org.specs2.matcher.DataTables
 import org.entish.FibonacciADay._
 
-class Fib_Spec extends Specification with DataTables {
+class `Fibonacci A Day Specification` extends Specification with DataTables {
   override def is =
     "fibonacci table should be correct" ! el
 

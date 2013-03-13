@@ -46,9 +46,10 @@ object FibonacciADay {
   }
 
   /* out of bounds */
-  def fibonacci_4(n: Int): Option[Int] = n match {
-    case m if m < 0 ⇒ None
-    case m          ⇒ Some(fibonacci_1(n))
+  def fibonacci_4(n: Int): Option[Long] = n match {
+    case m if m < 0   ⇒ None
+    case m if m > 164 ⇒ None
+    case m            ⇒ Some(fibonacci_3(n))
   }
 
 }
