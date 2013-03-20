@@ -152,14 +152,16 @@ object FibonacciADay {
 
   /* final version, and extended to negative numbers */
   def fibonacci(n: Int): BigInt = {
+    val limit = if (n < 0) -n else n
+    /* the fibonacci function per se — on natural numbers */
     def fib(m: Int): BigInt = {
-      @tailrec def recurse(i: Int, u: BigInt, v: BigInt, limit: Int): BigInt =
+      @tailrec def recurse(i: Int, u: BigInt, v: BigInt): BigInt =
         if (i == limit) v
-        else recurse(i + 1, v, u + v, limit)
+        else recurse(i + 1, v, u + v)
       (m: @switch) match {
         case 0 ⇒ BigInt(0)
         case 1 ⇒ BigInt(1)
-        case _ ⇒ recurse(1, 0, 1, m)
+        case _ ⇒ recurse(1, 0, 1)
       }
     }
     n match {
