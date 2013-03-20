@@ -47,7 +47,12 @@ class `Fibonacci A Day Specification` extends Specification with DataTables {
       35 ! 9227465 |
       36 ! 14930352 |
       37 ! 24157817 |
-      38 ! 39088169 |> {
-        (n, f) ⇒ fibonacci_2(n) must_== f
+      38 ! 39088169 |
+      -1 ! 1 |
+      -2 ! -1 |
+      -3 ! 2 |
+      -4 ! -3 |
+      -5 ! 5 |> {
+        (n, f) ⇒ fibonacci(n) must_== f
       }
 }

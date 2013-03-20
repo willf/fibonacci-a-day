@@ -150,6 +150,25 @@ object FibonacciADay {
     }
   }
 
+  /* final version, and extended to negative numbers */
+  def fibonacci(n: Int): BigInt = {
+    def fib(m: Int): BigInt = {
+      @tailrec def recurse(i: Int, u: BigInt, v: BigInt, limit: Int): BigInt =
+        if (i == limit) v
+        else recurse(i + 1, v, u + v, limit)
+      (m: @switch) match {
+        case 0 ⇒ BigInt(0)
+        case 1 ⇒ BigInt(1)
+        case _ ⇒ recurse(1, 0, 1, m)
+      }
+    }
+    n match {
+      case _ if (n >= 0)     ⇒ fib(n) // natural numbers 
+      case _ if (n % 2 == 0) ⇒ -fib(-n) // even, negative numbers*/
+      case _                 ⇒ fib(-n) // odd, negative numbers
+    }
+  }
+
   def benchmark(times: Int, fn: Function0[Any]) = {
     import scala.compat.Platform
     Platform.collectGarbage
