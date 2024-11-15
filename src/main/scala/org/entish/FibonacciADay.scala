@@ -142,7 +142,7 @@ object FibonacciADay {
   def fibonacci_7b(n: Long) = {
     val sqrt5 = math.sqrt(5.0)
     val Phi = (sqrt5 + 1) / 2.0
-    val phi = Φ - 1
+    val phi = Phi - 1
     ((math.pow(Phi, n.toDouble) - math.pow(-phi, n.toDouble)) / sqrt5).toLong
   }
 
