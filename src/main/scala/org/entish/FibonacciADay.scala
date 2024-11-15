@@ -67,8 +67,8 @@ object FibonacciADay {
   /* BigInt */
   def fibonacci_5(n: Int): BigInt = n match {
     case m if m < 0 ⇒ BigInt(-1)
-    case 0          ⇒ BigInt(0)
-    case 1          ⇒ BigInt(1)
+    case 0 ⇒ BigInt(0)
+    case 1 ⇒ BigInt(1)
     case m ⇒ {
       var u = BigInt(0)
       var v = BigInt(1)
@@ -89,9 +89,9 @@ object FibonacciADay {
       else recurse(i + 1, v, u + v)
     n match {
       case m if m < 0 ⇒ BigInt(-1)
-      case 0          ⇒ BigInt(0)
-      case 1          ⇒ BigInt(1)
-      case m          ⇒ recurse(1, 0, 1)
+      case 0 ⇒ BigInt(0)
+      case 1 ⇒ BigInt(1)
+      case m ⇒ recurse(1, 0, 1)
     }
   }
 
@@ -102,9 +102,9 @@ object FibonacciADay {
       else recurse(i + 1, v, u + v)
     n match {
       case m if m < 0 ⇒ BigInt(-1)
-      case 0          ⇒ BigInt(0)
-      case 1          ⇒ BigInt(1)
-      case m          ⇒ recurse(1, 0, 1)
+      case 0 ⇒ BigInt(0)
+      case 1 ⇒ BigInt(1)
+      case m ⇒ recurse(1, 0, 1)
     }
   }
 
@@ -138,6 +138,14 @@ object FibonacciADay {
     math.round(math.pow(φ, n) / sqrt5)
   }
 
+  /* Using Phi and phi — so-called Binet's formula — good to 92 or 7540113804746369024 */
+  def fibonacci_7b(n: Long) = {
+    val sqrt5 = math.sqrt(5.0)
+    val Phi = (sqrt5 + 1) / 2.0
+    val phi = Φ - 1
+    ((math.pow(Phi, n.toDouble) - math.pow(-phi, n.toDouble)) / sqrt5).toLong
+  }
+
   /* memoization */
   val memo = scala.collection.mutable.HashMap[Int, BigInt]()
   def fibonacci_8(n: Int): BigInt = {
@@ -150,8 +158,8 @@ object FibonacciADay {
     }
   }
 
-  /* final version, and extended to negative numbers */
-  def fibonacci(n: Int): BigInt = {
+  /* final tail recursive version, and extended to negative numbers */
+  def tail_fibonacci(n: Int): BigInt = {
     val limit = if (n < 0) -n else n
     /* the fibonacci function per se — on natural numbers */
     def fib(m: Int): BigInt = {
@@ -165,10 +173,78 @@ object FibonacciADay {
       }
     }
     n match {
-      case _ if (n >= 0)     ⇒ fib(n) // natural numbers 
+      case _ if (n >= 0) ⇒ fib(n) // natural numbers
       case _ if (n % 2 == 0) ⇒ -fib(-n) // even, negative numbers*/
-      case _                 ⇒ fib(-n) // odd, negative numbers
+      case _ ⇒ fib(-n) // odd, negative numbers
     }
+  }
+
+  /*
+
+  From http://www.billthelizard.com/2010/01/sicp-exercise-119-computing-fibonacci.html
+
+(define (fib n)
+   (fib-iter 1 0 0 1 n))
+
+(define (fib-iter a b p q count)
+   (cond ((= count 0) b)
+         ((even? count)
+          (fib-iter a
+                    b
+                    (+ (* p p) (* q q))     ; compute p'
+                    (+ (* 2 p q) (* q q))   ; compute q'
+                    (/ count 2)))
+         (else (fib-iter (+ (* b q) (* a q) (* a p))
+                         (+ (* b p) (* a q))
+                         p
+                         q
+                         (- count 1)))))
+   */
+
+  /* log version, extended to negative numbers */
+  def fibonacci(n: Int): BigInt = {
+    val limit = if (n < 0) -n else n
+    /* the fibonacci function per se — on natural numbers */
+    def fib(m: Int): BigInt = {
+      @tailrec def recurse(
+          a: BigInt,
+          b: BigInt,
+          p: BigInt,
+          q: BigInt,
+          count: Int
+      ): BigInt =
+        if (count == 0) b
+        else if (count % 2 == 0) {
+          val qq = q * q
+          recurse(a, b, (p * p + qq), (2 * p * q) + qq, count / 2)
+        } else {
+          val aq = a * q
+          recurse(b * q + aq + a * p, b * p + aq, p, q, count - 1)
+        }
+      (m: @switch) match {
+        case 0 ⇒ BigInt(0)
+        case 1 ⇒ BigInt(1)
+        case _ ⇒ recurse(1, 0, 0, 1, m)
+      }
+    }
+    n match {
+      case _ if (n >= 0) ⇒ fib(n) // natural numbers
+      case _ if (n % 2 == 0) ⇒ -fib(-n) // even, negative numbers*/
+      case _ ⇒ fib(-n) // odd, negative numbers
+    }
+  }
+
+  // http://www.scala-lang.org/api/current/index.html#scala.collection.immutable.Stream
+
+  lazy val _fibs: Stream[BigInt] =
+    BigInt(1) #:: BigInt(2) #:: (_fibs zip _fibs.tail map { case (x, y) ⇒
+      x + y
+    })
+
+  def stream_fibonacci(n: Int) = n match {
+    case _ if (n >= 0) ⇒ _fibs(n) // natural numbers
+    case _ if (n % 2 == 0) ⇒ -_fibs(-n) // even, negative numbers*/
+    case _ ⇒ _fibs(-n) // odd, negative numbers
   }
 
   def benchmark(times: Int, fn: Function0[Any]) = {
@@ -242,4 +318,3 @@ object FibMemo4 {
     fibmemoR(n) eval Map()
   }
 }
-
